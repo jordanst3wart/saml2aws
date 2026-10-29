@@ -1,8 +1,6 @@
 module github.com/versent/saml2aws/v2
 
-go 1.21.0
-
-toolchain go1.22.5
+go 1.23
 
 require (
 	github.com/99designs/keyring v1.2.2
@@ -24,7 +22,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/stretchr/testify v1.10.0
-	github.com/tidwall/gjson v1.18.0
+	github.com/tidwall/gjson v1.20.0
 	github.com/trimble-oss/go-webauthn-client v0.3.0
 	golang.org/x/net v0.30.0
 	gopkg.in/ini.v1 v1.67.0
