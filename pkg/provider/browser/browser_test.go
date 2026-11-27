@@ -219,21 +219,40 @@ func TestAutoFill(t *testing.T) {
 		}))
 		defer ts.Close()
 
-		pw, _ := playwright.Run()
-		browser, _ := pw.Chromium.Launch()
-		context, _ := browser.NewContext()
-		page, _ := context.NewPage()
-		_, _ = page.Goto(ts.URL)
+		pw, err := playwright.Run()
+		require.NoError(t, err)
+		defer func() { _ = pw.Stop() }()
+
+		browser, err := pw.Chromium.Launch()
+		require.NoError(t, err)
+		defer func() { _ = browser.Close() }()
+
+		context, err := browser.NewContext()
+		require.NoError(t, err)
+		page, err := context.NewPage()
+		require.NoError(t, err)
+		_, err = page.Goto(ts.URL)
+		require.NoError(t, err)
 
 		loginDetails := &creds.LoginDetails{URL: ts.URL, Username: "golang", Password: "gopher"}
-		_ = autoFill(page, loginDetails)
+		err = autoFill(page, loginDetails)
+		require.NoError(t, err, pageLocation)
 
-		username, _ := page.Locator("input[name='username']").First().InputValue()
-		assert.Equal(t, "golang", username)
-		password, _ := page.Locator("input[type='password']").First().InputValue()
-		assert.Equal(t, "gopher", password)
+		username, err := page.Locator("input[name='username']").First().InputValue()
+		require.NoError(t, err)
+		assert.Equal(t, "golang", username, pageLocation)
+		password, err := page.Locator("input[type='password']").First().InputValue()
+		require.NoError(t, err)
+		assert.Equal(t, "gopher", password, pageLocation)
 
-		result, _ := page.Locator("div#result").Evaluate("el => el.innerText", nil)
-		assert.Equal(t, "golang:gopher", result)
+		// form submission may complete asynchronously (e.g. form.submit() with a javascript: action)
+		resultLocator := page.Locator("div#result")
+		err = resultLocator.WaitFor(playwright.LocatorWaitForOptions{
+			State: playwright.WaitForSelectorStateVisible,
+		})
+		require.NoError(t, err, pageLocation)
+		result, err := resultLocator.Evaluate("el => el.innerText", nil)
+		require.NoError(t, err)
+		assert.Equal(t, "golang:gopher", result, pageLocation)
 	}
 }
