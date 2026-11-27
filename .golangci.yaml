@@ -1,11 +1,27 @@
+version: "2"
+
 linters:
-  disable-all: true
+  default: none
   enable:
-    - goimports
     - errcheck
-    - gosimple
     - govet
     - ineffassign
     - staticcheck
-    - typecheck
     - unused
+  settings:
+    staticcheck:
+      # v1 "staticcheck" (SA) + "gosimple" (S1); v2 also merges stylecheck (ST) and quickfix (QF)
+      checks:
+        - "SA*"
+        - "S1*"
+  exclusions:
+    # match the v1 default exclusions
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+
+formatters:
+  enable:
+    - goimports
