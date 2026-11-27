@@ -3,7 +3,7 @@ ARCH=$(shell uname -m)
 OS?=$(shell uname)
 ITERATION := 1
 
-GOLANGCI_VERSION = 1.55.2
+GOLANGCI_VERSION = 2.15.0
 GORELEASER := $(shell command -v goreleaser 2> /dev/null)
 
 SOURCE_FILES?=$$(go list ./... | grep -v /vendor/)
@@ -28,7 +28,7 @@ mod:
 	@go mod tidy
 .PHONY: mod
 
-lint: 
+lint:
 	@echo "--- lint all the things"
 	@docker run --rm -v $(shell pwd):/app -w /app golangci/golangci-lint:v$(GOLANGCI_VERSION) golangci-lint run -v
 .PHONY: lint
