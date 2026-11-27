@@ -9,7 +9,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.14.0
 	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/avast/retry-go v3.0.0+incompatible
-	github.com/aws/aws-sdk-go v1.55.6
+	github.com/aws/aws-sdk-go v1.55.8
 	github.com/beevik/etree v1.8.1
 	github.com/danieljoos/wincred v1.2.3
 	github.com/google/uuid v1.6.0
